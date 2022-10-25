@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans
-            https://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/context
-            https://www.springframework.org/schema/context/spring-context.xsd
-"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            https://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-    <context:annotation-config/>
 
-    <bean class="de.auinger.training.spring_boot.student.StudentService">
+    <!-- student -->
+
+    <bean class="de.auinger.training.spring_boot.student.StudentService"/>
+
+
+    <!-- course -->
+
+    <bean class="de.auinger.training.spring_boot.course.CourseService">
+        <constructor-arg index="0">
+            <list>
+                <bean class="de.auinger.training.spring_boot.course.Course">
+                    <constructor-arg name="id" value="OOP"/>
+                    <constructor-arg name="title" value="Object Oriented Programming"/>
+                </bean>
+                <bean class="de.auinger.training.spring_boot.course.Course">
+                    <constructor-arg name="id" value="NOSQL"/>
+                    <constructor-arg name="title" value="NoSQL Databases"/>
+                </bean>
+            </list>
+        </constructor-arg>
     </bean>
+
+
+    <!-- enrollment -->
+
+    <bean class="de.auinger.training.spring_boot.enrollment.EnrollmentService"
+          autowire="byType"/>
+
+    <bean class="de.auinger.training.spring_boot.enrollment.EnrollmentDao"/>
+
 
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
         <property name="locations">
