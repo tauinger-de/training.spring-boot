@@ -9,6 +9,7 @@
             https://www.springframework.org/schema/context/spring-context.xsd
 "
 >
+    <context:annotation-config/>
 
     <bean class="de.auinger.training.spring_boot.student.StudentService">
     </bean>
