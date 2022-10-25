@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +42,8 @@ public class AnnotatedServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        AutowireCapableBeanFactory beanFactory = ((ApplicationContext) getServletContext().getAttribute(
+        var servletContext = getServletContext();
+        AutowireCapableBeanFactory beanFactory = ((ApplicationContext) servletContext.getAttribute(
                 "applicationContext")).getAutowireCapableBeanFactory();
         beanFactory.autowireBean(this);
     }
