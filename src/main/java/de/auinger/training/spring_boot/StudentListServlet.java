@@ -2,6 +2,8 @@ package de.auinger.training.spring_boot;
 
 import de.auinger.training.spring_boot.course.Course;
 import de.auinger.training.spring_boot.course.CourseService;
+import de.auinger.training.spring_boot.enrollment.Enrollment;
+import de.auinger.training.spring_boot.enrollment.EnrollmentService;
 import de.auinger.training.spring_boot.student.Student;
 import de.auinger.training.spring_boot.student.StudentService;
 import lombok.Setter;
@@ -25,22 +27,34 @@ public class StudentListServlet extends HttpServlet {
     @Setter
     private CourseService courseService;
 
+    @Setter
+    private EnrollmentService enrollmentService;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/plain");
+        try {
+            response.setContentType("text/plain");
 
-        response.getWriter().println("STUDENTS:");
-        for (Student student : studentService.getStudents()) {
-            var repr = String.format("  #%d: %s, %s", student.getId(), student.getLastName(), student.getFirstName());
-            response.getWriter().println(repr);
-        }
+            response.getWriter().println("STUDENTS:");
+            for (Student student : studentService.getStudents()) {
+                var repr = String.format("  #%d: %s, %s", student.getId(), student.getLastName(), student.getFirstName());
+                response.getWriter().println(repr);
+            }
 
-        response.getWriter().println("\nCOURSES:");
-        for (Course c : courseService.getCourses()) {
-            var repr = String.format("  %s: %s (max=%d)", c.getId(), c.getTitle(), c.getMaxEnrollments());
-            response.getWriter().println(repr);
+            response.getWriter().println("\nCOURSES:");
+            for (Course c : courseService.getCourses()) {
+                var repr = String.format("  %s: %s (max=%d)", c.getId(), c.getTitle(), c.getMaxEnrollments());
+                response.getWriter().println(repr);
+
+                for (Enrollment e : enrollmentService.getEnrollments(c.getId())) {
+                    repr = String.format("    studentId %d", e.getStudentId());
+                    response.getWriter().println(repr);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e);
         }
     }
 
