@@ -20,6 +20,16 @@ public class EnrollmentDao implements EnrollmentRepository, RowMapper<Enrollment
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
+    public Collection<Enrollment> findAll() {
+        return this.jdbcTemplate.query(
+                "SELECT e.* FROM enrollments e",
+                new Object[]{},
+                new int[]{},
+                this
+        );
+    }
+
     @Override
     public Collection<Enrollment> findAllByCourseId(String courseId) {
         return this.jdbcTemplate.query(
@@ -39,7 +49,7 @@ public class EnrollmentDao implements EnrollmentRepository, RowMapper<Enrollment
     public Enrollment save(Enrollment enrollment) {
         this.jdbcTemplate.update(
                 "INSERT INTO enrollments (std_id, crs_id) VALUES (?, ?)",
-                new Object[]{enrollment.getStudentId(), enrollment.getStudentId()}
+                new Object[]{enrollment.getStudentId(), enrollment.getCourseId()}
         );
         return enrollment;
     }

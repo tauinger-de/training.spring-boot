@@ -11,4 +11,5 @@ public interface EnrollmentRepository {
 
     Enrollment save(Enrollment enrollment);
 
+    Collection<Enrollment> findAll();
 }
