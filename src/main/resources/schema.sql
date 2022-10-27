@@ -1,4 +1,4 @@
-DROP TABLE enrollments;
+DROP TABLE IF EXISTS enrollments;
 
 CREATE TABLE enrollments (
     std_id int,

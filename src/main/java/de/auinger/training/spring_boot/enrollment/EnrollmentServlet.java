@@ -1,9 +1,7 @@
-package de.auinger.training.spring_boot;
+package de.auinger.training.spring_boot.enrollment;
 
 import de.auinger.training.spring_boot.course.Course;
 import de.auinger.training.spring_boot.course.CourseService;
-import de.auinger.training.spring_boot.enrollment.Enrollment;
-import de.auinger.training.spring_boot.enrollment.EnrollmentService;
 import de.auinger.training.spring_boot.student.Student;
 import de.auinger.training.spring_boot.student.StudentService;
 import lombok.Setter;
@@ -18,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/students")
-public class StudentListServlet extends HttpServlet {
+@WebServlet(value = "/enroll")
+public class EnrollmentServlet extends HttpServlet {
 
     @Setter
     private StudentService studentService;
@@ -37,23 +35,19 @@ public class StudentListServlet extends HttpServlet {
         try {
             response.setContentType("text/plain");
 
-            response.getWriter().println("STUDENTS:");
-            for (Student student : studentService.getStudents()) {
-                var repr = String.format("  #%d: %s, %s", student.getId(), student.getLastName(), student.getFirstName());
-                response.getWriter().println(repr);
-            }
+            long studentId = Long.parseLong(request.getParameter("sid"));
+            String courseId = request.getParameter("cid");
 
-            response.getWriter().println("\nCOURSES:");
-            for (Course c : courseService.getCourses()) {
-                var repr = String.format("  %s: %s (max=%d)", c.getId(), c.getTitle(), c.getMaxEnrollments());
-                response.getWriter().println(repr);
+            // call getters to make sure entities exist -- methods throw exception if missing
+            studentService.getStudent(studentId);
+            courseService.getCourse(courseId);
 
-                for (Enrollment e : enrollmentService.getEnrollments(c.getId())) {
-                    repr = String.format("    studentId %d", e.getStudentId());
-                    response.getWriter().println(repr);
-                }
-            }
+            // perform enrollment
+            enrollmentService.enroll(studentId, courseId);
+
+            response.getWriter().println("Enrollment done");
         } catch (Exception e) {
+            e.printStackTrace(response.getWriter());
             System.err.println(e);
         }
     }

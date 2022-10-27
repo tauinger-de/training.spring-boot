@@ -12,8 +12,11 @@
 
     <!-- course -->
 
-    <bean class="de.auinger.training.spring_boot.course.CourseService">
-        <constructor-arg index="0">
+    <bean id="courseService" class="de.auinger.training.spring_boot.course.CourseService" />
+
+    <bean class="de.auinger.training.spring_boot.course.CourseDemoDataWriter">
+        <property name="courseService" ref="courseService" />
+        <property name="courses">
             <list>
                 <bean class="de.auinger.training.spring_boot.course.Course">
                     <constructor-arg name="id" value="OOP"/>
@@ -24,7 +27,7 @@
                     <constructor-arg name="title" value="NoSQL Databases"/>
                 </bean>
             </list>
-        </constructor-arg>
+        </property>
     </bean>
 
 
@@ -49,7 +52,7 @@
 
     <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:tcp://localhost/~/test"/>
+        <property name="url" value="jdbc:h2:tcp://localhost/~/training.spring-boot"/>
     </bean>
 
 

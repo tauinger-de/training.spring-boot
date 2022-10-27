@@ -10,10 +10,13 @@ public class EnrollmentService {
     @Setter
     private EnrollmentRepository enrollmentRepository;
 
-    public Collection<Enrollment> getEnrollments(String courseId) {
-        return this.enrollmentRepository.findAllByCourseId(courseId);
+    public Collection<Enrollment> getEnrollments() {
+        return this.enrollmentRepository.findAll();
     }
 
+    public Collection<Enrollment> getEnrollmentsForCourse(String courseId) {
+        return this.enrollmentRepository.findAllByCourseId(courseId);
+    }
 
     public boolean isEnrolled(long studentId, String courseId) {
         Optional<Enrollment> optEnrollment = this.enrollmentRepository.findByStudentIdAndCourseId(
